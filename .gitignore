@@ -1,0 +1,26 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Arquivos temporários
+*.tmp
+
+# Diretórios node_modules gerados localmente
+node_modules/
+
+# Arquivos de saída de compilação
+dist/
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.*.local
+
+# Arquivos de configuração
+npm-debug.log
+yarn-error.log
+*.swp
+
+# Server
+.vercel

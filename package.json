@@ -1,0 +1,20 @@
+{
+  "name": "bdij-api",
+  "version": "1.0.0",
+  "description": "API da Base de Dados de Institutos Jurídicos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vercel": "vercel dev"
+  },
+  "keywords": [],
+  "author": "@edpomacedo",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "fastify": "^4.25.2"
+  },
+  "devDependencies": {
+    "@vercel/node": "^3.0.14"
+  }
+}
