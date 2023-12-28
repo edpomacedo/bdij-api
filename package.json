@@ -11,13 +11,12 @@
   "author": "@edpomacedo",
   "license": "ISC",
   "dependencies": {
-    "@fastify/cors": "^7.0.0",
+    "@fastify/cors": "^8.5.0",
     "axios": "^1.6.3",
     "dotenv": "^16.3.1",
     "fastify": "^4.25.2"
   },
   "devDependencies": {
-    "@types/fastify-cors": "^2.1.0",
     "@vercel/node": "^3.0.14"
   }
 }

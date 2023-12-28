@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest, FastifyServerOptions } from 'fastify';
-import fastifyCors from 'fastify-cors';
+import fastifyCors, { FastifyCorsOptions } from '@fastify/cors';
 import axios from 'axios';
 
 interface IQueryString {
@@ -11,12 +11,16 @@ interface CustomRouteGenericQuery {
 }
 
 export default async function (instance: FastifyInstance, opts: FastifyServerOptions, done) {
-  // Register @fastify/cors plugin
-  instance.register(fastifyCors, {
-    origin: '*',
+  // Define your CORS options
+  const corsOptions: FastifyCorsOptions = {
+    origin: '*', // You can customize this based on your requirements
     methods: ['GET', 'POST'],
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
-  });
+    // Add other CORS options as needed
+  };
+
+  // Register @fastify/cors plugin with the defined options
+  instance.register(fastifyCors, corsOptions);
 
   instance.get('/', async (req: FastifyRequest, res: FastifyReply) => {
     res.status(200).send('Bem-vindo à sua aplicação FastAPI!');
