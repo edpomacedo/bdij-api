@@ -1,45 +1,59 @@
-import { FastifyInstance, FastifyReply, FastifyRequest, FastifyServerOptions } from 'fastify'
+import { FastifyInstance, FastifyReply, FastifyRequest, FastifyServerOptions } from 'fastify';
+import fastifyCors from 'fastify-cors';
+import axios from 'axios';
 
 interface IQueryString {
-    name: string;
-}
-
-interface IParams {
-    name: string;
-}
-
-interface CustomRouteGenericParam {
-    Params: IParams
+  resource: string;
 }
 
 interface CustomRouteGenericQuery {
-    Querystring: IQueryString
+  Querystring: IQueryString;
 }
 
 export default async function (instance: FastifyInstance, opts: FastifyServerOptions, done) {
+  instance.register(fastifyCors, {
+    origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+  });
 
+  instance.get('/', async (req: FastifyRequest, res: FastifyReply) => {
+    res.status(200).send('Bem-vindo à sua aplicação FastAPI!');
+  });
 
-    instance.get('/', async (req: FastifyRequest, res: FastifyReply) => {
-        res.status(200).send({
-            hello: 'World'
-        })
-    })
+  instance.get('/rest', async (req: FastifyRequest<CustomRouteGenericQuery>, res: FastifyReply) => {
+    try {
+      const { resource } = req.query;
+      if (!resource) {
+        res.status(400).send({ error: 'Parameter "resource" is required.' });
+      }
 
-    instance.register(async (instance: FastifyInstance, opts: FastifyServerOptions, done) => {
+      const apiUrl = `https://web.bdij.com.br/w/rest.php/v1/page/${resource}`;
+      const { data } = await axios.get(apiUrl);
 
-        instance.get('/', async (req: FastifyRequest<CustomRouteGenericQuery>, res: FastifyReply) => {
-            const { name = '' } = req.query
-            res.status(200).send(`Hello ${name}`)
-        })
+      res.send(data);
+    } catch (error) {
+      console.error('Error:', error.message);
+      res.status(500).send({ error: 'Internal Server Error' });
+    }
+  });
 
-        instance.get('/:name', async (req: FastifyRequest<CustomRouteGenericParam>, res: FastifyReply) => {
-            const { name = '' } = req.params
-            res.status(200).send(`Hello ${name}`)
-        })
-        done()
-    }, {
-        prefix: '/hello'
-    })
+  instance.get('/api', async (req: FastifyRequest<CustomRouteGenericQuery>, res: FastifyReply) => {
+    try {
+      const { resource } = req.query;
+      if (!resource) {
+        res.status(400).send({ error: 'Parameter "resource" is required.' });
+      }
 
-    done()
+      const apiUrl = `https://web.bdij.com.br/w/api.php/${resource}`;
+      const { data } = await axios.get(apiUrl);
+
+      res.send(data);
+    } catch (error) {
+      console.error('Error:', error.message);
+      res.status(500).send({ error: 'Internal Server Error' });
+    }
+  });
+
+  done();
 }
