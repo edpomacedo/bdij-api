@@ -11,6 +11,7 @@ interface CustomRouteGenericQuery {
 }
 
 export default async function (instance: FastifyInstance, opts: FastifyServerOptions, done) {
+  // Register @fastify/cors plugin
   instance.register(fastifyCors, {
     origin: '*',
     methods: ['GET', 'POST'],
